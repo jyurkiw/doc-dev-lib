@@ -54,6 +54,18 @@ pub async fn delete(db: &Db, id: i64) -> Result<(), DbError> {
     Ok(())
 }
 
+/// Returns an existing author by name, or creates one if not found.
+pub async fn find_or_create(db: &Db, name: &str) -> Result<Author, DbError> {
+    let existing = sqlx::query_as::<_, Author>("SELECT * FROM Authors WHERE name = ? LIMIT 1")
+        .bind(name)
+        .fetch_optional(&db.pool)
+        .await?;
+    match existing {
+        Some(author) => Ok(author),
+        None => create(db, name, None).await,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

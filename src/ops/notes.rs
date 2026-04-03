@@ -22,6 +22,15 @@ pub async fn create(
     Ok(row)
 }
 
+/// Returns a single note by its primary key, or None if not found.
+pub async fn get(db: &Db, note_id: i64) -> Result<Option<Note>, DbError> {
+    let row = sqlx::query_as::<_, Note>("SELECT * FROM Notes WHERE id = ?")
+        .bind(note_id)
+        .fetch_optional(&db.pool)
+        .await?;
+    Ok(row)
+}
+
 /// Marks a note as resolved by setting resolution_id to the given Sections.id.
 pub async fn resolve(db: &Db, note_id: i64, resolution_id: i64) -> Result<Note, DbError> {
     let row = sqlx::query_as::<_, Note>(
