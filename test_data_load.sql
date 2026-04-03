@@ -9,7 +9,7 @@
 --       2.1  Current Version
 --       2.2  `level` Column
 --       2.3  Subsections References
---       2.4  `order` Column
+--       2.4  layout_order Column
 --   3. 4NF Design Issue: section_id FK Integrity
 --   4. Tables
 --       4.1  Authors
@@ -64,7 +64,7 @@ INSERT INTO SectionIdentities (section_id, document_id) VALUES
     ('00000000-0000-0000-0000-000000000008', 1),  -- 2.1 Current Version
     ('00000000-0000-0000-0000-000000000009', 1),  -- 2.2 `level` Column
     ('00000000-0000-0000-0000-00000000000a', 1),  -- 2.3 Subsections References
-    ('00000000-0000-0000-0000-00000000000b', 1);  -- 2.4 `order` Column
+    ('00000000-0000-0000-0000-00000000000b', 1);  -- 2.4 layout_order Column
 
 -- Subsections of Tables (4.x)
 INSERT INTO SectionIdentities (section_id, document_id) VALUES
@@ -82,7 +82,7 @@ INSERT INTO SectionIdentities (section_id, document_id) VALUES
 -- id values are relied upon by the Notes inserts below.
 
 -- 1. Context  (id=1)
-INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES (
+INSERT INTO Sections (section_id, layout_order, name, revision_date, content) VALUES (
     '00000000-0000-0000-0000-000000000001',
     1.0,
     'Context',
@@ -98,7 +98,7 @@ This is stage 1: creating the SQLite schema only.'
 );
 
 -- 2. Key Design Decisions  (id=2)
-INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES (
+INSERT INTO Sections (section_id, layout_order, name, revision_date, content) VALUES (
     '00000000-0000-0000-0000-000000000002',
     2.0,
     'Key Design Decisions',
@@ -107,7 +107,7 @@ INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES 
 );
 
 -- 3. 4NF Design Issue: section_id FK Integrity  (id=3)
-INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES (
+INSERT INTO Sections (section_id, layout_order, name, revision_date, content) VALUES (
     '00000000-0000-0000-0000-000000000003',
     3.0,
     '4NF Design Issue: section_id FK Integrity',
@@ -120,7 +120,7 @@ INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES 
 );
 
 -- 4. Tables  (id=4)
-INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES (
+INSERT INTO Sections (section_id, layout_order, name, revision_date, content) VALUES (
     '00000000-0000-0000-0000-000000000004',
     4.0,
     'Tables',
@@ -129,7 +129,7 @@ INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES 
 );
 
 -- 5. File to Create  (id=5)
-INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES (
+INSERT INTO Sections (section_id, layout_order, name, revision_date, content) VALUES (
     '00000000-0000-0000-0000-000000000005',
     5.0,
     'File to Create',
@@ -138,7 +138,7 @@ INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES 
 );
 
 -- 6. schema.sql Structure  (id=6)
-INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES (
+INSERT INTO Sections (section_id, layout_order, name, revision_date, content) VALUES (
     '00000000-0000-0000-0000-000000000006',
     6.0,
     'schema.sql Structure',
@@ -161,7 +161,7 @@ Includes useful indexes:
 );
 
 -- 7. Verification  (id=7)
-INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES (
+INSERT INTO Sections (section_id, layout_order, name, revision_date, content) VALUES (
     '00000000-0000-0000-0000-000000000007',
     7.0,
     'Verification',
@@ -178,7 +178,7 @@ Verify all six tables are present and all four FK relationships on Notes are rep
 );
 
 -- 2.1 Current Version  (id=8)
-INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES (
+INSERT INTO Sections (section_id, layout_order, name, revision_date, content) VALUES (
     '00000000-0000-0000-0000-000000000008',
     1.0,
     'Current Version',
@@ -195,7 +195,7 @@ SELECT * FROM Sections WHERE section_id = ? ORDER BY revision_date DESC LIMIT 1;
 );
 
 -- 2.2 `level` Column  (id=9)
-INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES (
+INSERT INTO Sections (section_id, layout_order, name, revision_date, content) VALUES (
     '00000000-0000-0000-0000-000000000009',
     2.0,
     '`level` Column',
@@ -208,7 +208,7 @@ INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES 
 );
 
 -- 2.3 Subsections References  (id=10)
-INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES (
+INSERT INTO Sections (section_id, layout_order, name, revision_date, content) VALUES (
     '00000000-0000-0000-0000-00000000000a',
     3.0,
     'Subsections References',
@@ -220,13 +220,13 @@ Parent-child relationships are a property of the logical section, not of any spe
 **Why:** Version-agnostic hierarchy is simpler to maintain and query.'
 );
 
--- 2.4 `order` Column  (id=11)
-INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES (
+-- 2.4 layout_order Column  (id=11)
+INSERT INTO Sections (section_id, layout_order, name, revision_date, content) VALUES (
     '00000000-0000-0000-0000-00000000000b',
     4.0,
-    '`order` Column',
+    'layout_order Column',
     '2026-04-03 12:00:00',
-    '**Decision:** The `order` column is a `REAL` (float) value, scoped relative to the parent section (or document root for top-level sections).
+    '**Decision:** The `layout_order` column is a `REAL` (float) value, scoped relative to the parent section (or document root for top-level sections).
 
 Using a float allows a new section to be inserted between two existing sections by choosing a midpoint value, without renumbering siblings. Top-level sections are ordered among other top-level sections; subsections are ordered among siblings under the same parent.
 
@@ -234,7 +234,7 @@ Using a float allows a new section to be inserted between two existing sections 
 );
 
 -- 4.1 Authors table  (id=12)
-INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES (
+INSERT INTO Sections (section_id, layout_order, name, revision_date, content) VALUES (
     '00000000-0000-0000-0000-00000000000c',
     1.0,
     'Authors Table',
@@ -249,7 +249,7 @@ Top-level entity. An author is any agent (human or AI) that can be attributed to
 );
 
 -- 4.2 Documents table  (id=13)
-INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES (
+INSERT INTO Sections (section_id, layout_order, name, revision_date, content) VALUES (
     '00000000-0000-0000-0000-00000000000d',
     2.0,
     'Documents Table',
@@ -264,7 +264,7 @@ Top-level entity. A document is the top-level container for a set of sections.'
 );
 
 -- 4.3 SectionIdentities table  (id=14)
-INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES (
+INSERT INTO Sections (section_id, layout_order, name, revision_date, content) VALUES (
     '00000000-0000-0000-0000-00000000000e',
     3.0,
     'SectionIdentities Table',
@@ -278,7 +278,7 @@ Logical section registry. One row per unique section identity. Introduced to giv
 );
 
 -- 4.4 Sections table  (id=15)
-INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES (
+INSERT INTO Sections (section_id, layout_order, name, revision_date, content) VALUES (
     '00000000-0000-0000-0000-00000000000f',
     4.0,
     'Sections Table',
@@ -287,7 +287,7 @@ INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES 
 |---------------|----------|-------------------------------------------|
 | id            | INTEGER  | PRIMARY KEY AUTOINCREMENT                 |
 | section_id    | TEXT     | NOT NULL, FK → SectionIdentities(section_id) |
-| order         | REAL     | NOT NULL                                  |
+| layout_order  | REAL     | NOT NULL                                  |
 | name          | TEXT     | NOT NULL DEFAULT ''''                      |
 | revision_date | DATETIME | NOT NULL DEFAULT CURRENT_TIMESTAMP        |
 | content       | TEXT     | NOT NULL DEFAULT ''''                      |
@@ -296,7 +296,7 @@ Versioned rows. Each INSERT is a new revision. Current version = MAX(revision_da
 );
 
 -- 4.5 Subsections table  (id=16)
-INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES (
+INSERT INTO Sections (section_id, layout_order, name, revision_date, content) VALUES (
     '00000000-0000-0000-0000-000000000010',
     5.0,
     'Subsections Table',
@@ -311,7 +311,7 @@ Parent-child join table operating on logical section_ids. A section with no row 
 );
 
 -- 4.6 Notes table  (id=17)
-INSERT INTO Sections (section_id, "order", name, revision_date, content) VALUES (
+INSERT INTO Sections (section_id, layout_order, name, revision_date, content) VALUES (
     '00000000-0000-0000-0000-000000000011',
     6.0,
     'Notes Table',

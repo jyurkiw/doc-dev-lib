@@ -30,7 +30,7 @@ CREATE TABLE SectionIdentities (
 CREATE TABLE Sections (
     id            INTEGER  PRIMARY KEY AUTOINCREMENT,
     section_id    TEXT     NOT NULL REFERENCES SectionIdentities(section_id),
-    "order"       REAL     NOT NULL,           -- float, relative to siblings
+    layout_order  REAL     NOT NULL,           -- float, relative to siblings
     name          TEXT     NOT NULL DEFAULT '',
     revision_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     content       TEXT     NOT NULL DEFAULT ''

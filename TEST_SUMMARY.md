@@ -1,0 +1,14 @@
+# Test Summary
+
+Unit test coverage for all `ops` CRUD functions. Each test uses an isolated in-memory SQLite
+database initialized with the full schema. Cells list the test function names covering that
+operation. "N/A" marks operations not exposed by the library's design.
+
+| Model | Create | Read | Update | Delete |
+|---|---|---|---|---|
+| **Author** | `create_returns_author_with_id`<br>`create_with_no_description` | `get_returns_existing_author`<br>`get_returns_none_for_missing_id`<br>`list_returns_all_authors`<br>`list_returns_empty_when_none` | `update_changes_name_and_description`<br>`update_can_clear_description`<br>`update_returns_not_found_for_missing_id` | `delete_removes_author`<br>`delete_nonexistent_is_ok` |
+| **Document** | `create_returns_document_with_id`<br>`create_with_no_description` | `get_returns_existing_document`<br>`get_returns_none_for_missing_id`<br>`list_returns_all_documents`<br>`list_returns_empty_when_none` | `update_changes_name_and_description`<br>`update_can_clear_description`<br>`update_returns_not_found_for_missing_id` | `delete_removes_document`<br>`delete_nonexistent_is_ok` |
+| **SectionIdentity** | `create_section_top_level`<br>`create_section_with_parent_inserts_subsection_row`<br>_(created atomically inside `create_section`)_ | `list_current_for_document_returns_one_per_section`<br>_(identity read is implicit in all section queries)_ | N/A _(identity rows are immutable)_ | N/A _(no public delete; removed with document)_ |
+| **Section** | `create_section_top_level`<br>`create_section_with_parent_inserts_subsection_row`<br>`revise_section_appends_new_row` | `get_current_returns_latest_revision`<br>`get_current_returns_none_for_unknown_id`<br>`get_history_returns_all_revisions_newest_first`<br>`list_current_for_document_returns_one_per_section`<br>`list_current_for_document_ordered_by_layout_order`<br>`list_current_for_document_excludes_other_documents` | `revise_section_appends_new_row`<br>_(append-only; revision IS the update)_ | N/A _(append-only design; no row is ever deleted)_ |
+| **Subsection** | `add_child_creates_relationship` | `get_children_returns_current_revision_ordered_by_layout_order`<br>`get_children_returns_empty_for_leaf`<br>`get_parent_returns_parent_section`<br>`get_parent_returns_none_for_top_level`<br>`get_top_level_excludes_children`<br>`get_top_level_ordered_by_layout_order` | N/A _(join table; no fields to update)_ | `remove_child_deletes_relationship`<br>`remove_child_nonexistent_is_ok` |
+| **Note** | `create_returns_note_with_id` | `list_for_section_returns_notes_on_that_section`<br>`list_for_section_excludes_other_sections`<br>`list_unresolved_returns_only_open_notes`<br>`list_unresolved_returns_empty_when_all_resolved`<br>`list_unresolved_returns_empty_when_no_notes` | `resolve_sets_resolution_id`<br>`resolve_returns_not_found_for_missing_note`<br>_(only mutable field is `resolution_id`)_ | N/A _(notes are permanent audit records)_ |
